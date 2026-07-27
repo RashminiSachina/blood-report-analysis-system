@@ -1,0 +1,368 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 80px;
+  padding-bottom: 80px;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  width: 100%;
+}
+
+/* Hero Section */
+.heroSection {
+  padding-top: 56px;
+}
+
+.heroGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: center;
+}
+
+.heroLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  align-items: flex-start;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  border-radius: 20px;
+  background-color: var(--color-secondary-light);
+  color: var(--color-secondary);
+  font-size: 0.84375rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.heroTitle {
+  font-size: 2.75rem;
+  line-height: 1.18;
+  font-weight: 500;
+  color: var(--color-primary);
+  letter-spacing: -0.02em;
+}
+
+.heroSubtitle {
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: var(--color-text-secondary);
+}
+
+.heroActions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+/* Preview Card */
+.previewCard {
+  background-color: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 28px;
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.previewHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--color-border-soft);
+}
+
+.previewTitle {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.previewBadge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  background-color: var(--color-bg);
+  padding: 4px 10px;
+  border-radius: 12px;
+  border: 1px solid var(--color-border);
+}
+
+.labMainCard {
+  background-color: var(--color-bg);
+  border-radius: var(--radius-md);
+  padding: 18px;
+  border: 1px solid var(--color-border-soft);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.labMainHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.labValueRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.labValueMono {
+  font-family: var(--font-mono);
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--color-primary);
+  background-color: var(--color-card);
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+}
+
+.labArrow {
+  color: var(--color-text-muted);
+  display: flex;
+  align-items: center;
+}
+
+.statusPillAmber {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  background-color: var(--color-danger-bg);
+  color: var(--color-danger);
+}
+
+.labExplanation {
+  font-size: 0.8875rem;
+  color: var(--color-text);
+  line-height: 1.6;
+}
+
+.inRangeList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.inRangeTitle {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.inRangeItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background-color: var(--color-card);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border-soft);
+}
+
+.inRangeLeft {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.checkIcon {
+  color: var(--color-success);
+  display: flex;
+  align-items: center;
+}
+
+.inRangeMono {
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--color-text);
+}
+
+.inRangeDesc {
+  font-size: 0.8125rem;
+  color: var(--color-text-secondary);
+}
+
+/* Features Section */
+.featuresSection {
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+}
+
+.sectionHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  text-align: center;
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+.sectionTitle {
+  font-size: 2rem;
+  font-weight: 500;
+  color: var(--color-primary);
+}
+
+.sectionSubtitle {
+  font-size: 1rem;
+  color: var(--color-text-secondary);
+}
+
+.featuresGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+/* How It Works Section */
+.howItWorksSection {
+  background-color: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 48px 36px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  box-shadow: var(--shadow-sm);
+}
+
+.stepsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+.stepCard {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  position: relative;
+}
+
+.stepIconTile {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-md);
+  background-color: var(--color-secondary-light);
+  color: var(--color-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stepLabel {
+  font-size: 0.78125rem;
+  font-weight: 700;
+  color: var(--color-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.stepTitle {
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: var(--color-text);
+}
+
+.stepDesc {
+  font-size: 0.8875rem;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+}
+
+/* Closing CTA Section */
+.ctaCard {
+  background: var(--color-primary);
+  color: #FFFFFF;
+  border-radius: var(--radius-lg);
+  padding: 56px 36px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  box-shadow: var(--shadow-lg);
+}
+
+.ctaTitle {
+  font-size: 2.25rem;
+  color: var(--color-bg);
+  font-weight: 500;
+}
+
+.ctaSubtitle {
+  font-size: 1.05rem;
+  color: #94A3B8;
+  max-width: 540px;
+}
+
+.ctaButton {
+  margin-top: 12px;
+}
+
+/* Responsive Media Queries */
+@media (max-width: 1024px) {
+  .featuresGrid,
+  .stepsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 860px) {
+  .heroGrid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .heroTitle {
+    font-size: 2.25rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .featuresGrid,
+  .stepsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .howItWorksSection {
+    padding: 32px 20px;
+  }
+
+  .ctaCard {
+    padding: 40px 20px;
+  }
+
+  .ctaTitle {
+    font-size: 1.75rem;
+  }
+}
