@@ -44,22 +44,42 @@ export default function Login() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
 
     setLoading(true);
     setSuccessMsg('');
 
-    // Simulate async submission
-    setTimeout(() => {
-      setLoading(false);
-      console.log('Login Form Submitted:', formData);
+    try {
+      const response = await fetch('http://localhost:5000/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setErrors({ general: data.message || 'Login failed. Please try again.' });
+        setLoading(false);
+        return;
+      }
+
+      // Store token and user info
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('user', JSON.stringify(data.user));
+
       setSuccessMsg('Log in successful! Redirecting...');
-      setTimeout(() => {
-        navigate('/');
-      }, 1000);
-    }, 1200);
+      setTimeout(() => navigate('/'), 1000);
+    } catch (err) {
+      setErrors({ general: 'Unable to connect to server. Please try again.' });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -99,6 +119,19 @@ export default function Login() {
               fontWeight: '500'
             }}>
               {successMsg}
+            </div>
+          )}
+
+          {errors.general && (
+            <div style={{
+              padding: '10px 14px',
+              backgroundColor: 'var(--color-error-bg, #fef2f2)',
+              color: 'var(--color-error, #dc2626)',
+              borderRadius: 'var(--radius-sm)',
+              fontSize: '0.8875rem',
+              fontWeight: '500'
+            }}>
+              {errors.general}
             </div>
           )}
 

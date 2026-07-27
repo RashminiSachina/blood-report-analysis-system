@@ -77,22 +77,39 @@ export default function Register() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
 
     setLoading(true);
     setSuccessMsg('');
 
-    // Simulate async submission
-    setTimeout(() => {
-      setLoading(false);
-      console.log('Register Form Submitted:', formData);
+    try {
+      const response = await fetch('http://localhost:5000/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: formData.fullName,
+          email: formData.email,
+          password: formData.password,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setErrors({ general: data.message || 'Registration failed. Please try again.' });
+        setLoading(false);
+        return;
+      }
+
       setSuccessMsg('Account created successfully! Redirecting to login...');
-      setTimeout(() => {
-        navigate('/login');
-      }, 1200);
-    }, 1200);
+      setTimeout(() => navigate('/login'), 1200);
+    } catch (err) {
+      setErrors({ general: 'Unable to connect to server. Please try again.' });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -132,6 +149,19 @@ export default function Register() {
               fontWeight: '500'
             }}>
               {successMsg}
+            </div>
+          )}
+
+          {errors.general && (
+            <div style={{
+              padding: '10px 14px',
+              backgroundColor: 'var(--color-error-bg, #fef2f2)',
+              color: 'var(--color-error, #dc2626)',
+              borderRadius: 'var(--radius-sm)',
+              fontSize: '0.8875rem',
+              fontWeight: '500'
+            }}>
+              {errors.general}
             </div>
           )}
 
