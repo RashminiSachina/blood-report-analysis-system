@@ -13,12 +13,7 @@ export default function Navbar() {
 
   const handleUploadClick = () => {
     closeMobile();
-    navigate('/');
-    // Scroll to hero or action section
-    const el = document.getElementById('upload-section');
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
-    }
+    navigate('/upload');
   };
 
   return (

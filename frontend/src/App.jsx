@@ -5,6 +5,8 @@ import Footer from './components/Footer';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import UploadReport from './pages/UploadReport';
+import AnalysisResults from './pages/AnalysisResults';
 
 function App() {
   return (
@@ -16,6 +18,8 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/upload" element={<UploadReport />} />
+            <Route path="/results/:id" element={<AnalysisResults />} />
           </Routes>
         </main>
         <Footer />

@@ -1,0 +1,40 @@
+.uploadingWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.uploadingTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.uploadingLabel {
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--color-text);
+}
+
+.uploadingPct {
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-secondary);
+}
+
+.progressTrack {
+  width: 100%;
+  height: 6px;
+  background-color: var(--color-border);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background-color: var(--color-secondary);
+  border-radius: 999px;
+  transition: width 0.18s ease;
+}
