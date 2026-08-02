@@ -1,4 +1,4 @@
-const Anthropic = require('@anthropic-ai/sdk');
+const { GoogleGenerativeAI } = require("@google/generative-ai");
 
 const SYSTEM_PROMPT = `You are an expert Clinical Laboratory Report Analyzer for a healthcare application.
 
@@ -191,91 +191,37 @@ function cleanJsonResponse(rawText) {
  * @returns {Promise<Object>} Structured analysis JSON object
  */
 async function analyzeReportText(reportText) {
-  const apiKey = process.env.ANTHROPIC_API_KEY;
+  const apiKey = process.env.GEMINI_API_KEY;
 
-  // Fallback mock mode when ANTHROPIC_API_KEY is not configured
-  if (!apiKey || apiKey === 'your_anthropic_api_key_here') {
-    console.warn('[aiService] ANTHROPIC_API_KEY is missing or unconfigured. Using demo mock response.');
+  if (!apiKey) {
+  throw new Error("GEMINI_API_KEY is missing");
+}
 
-    return {
-      summary: 'Five laboratory parameters were identified. Two results are outside the reference range.',
-      parameters: [
-        {
-          name: 'Hemoglobin',
-          abbreviation: 'HGB',
-          value: 11.2,
-          unit: 'g/dL',
-          referenceRange: '12.0 - 15.5',
-          referenceSource: 'report',
-          status: 'low',
-          explanation: 'Hemoglobin is an iron-rich protein in red blood cells that carries oxygen throughout your body. This result is outside the reference range and is worth discussing with your healthcare provider.'
-        },
-        {
-          name: 'White Blood Cell Count',
-          abbreviation: 'WBC',
-          value: 6.8,
-          unit: 'x10^3 / µL',
-          referenceRange: '4.5 - 11.0',
-          referenceSource: 'report',
-          status: 'normal',
-          explanation: 'White blood cells are part of the immune system that helps defend the body against infections. Your result is within the healthy reference range.'
-        },
-        {
-          name: 'Platelet Count',
-          abbreviation: 'PLT',
-          value: 245,
-          unit: 'x10^3 / µL',
-          referenceRange: '150 - 450',
-          referenceSource: 'report',
-          status: 'normal',
-          explanation: 'Platelets are cell fragments that play a key role in blood clotting and wound healing. Your result is within the healthy reference range.'
-        },
-        {
-          name: 'Total Cholesterol',
-          abbreviation: 'CHO',
-          value: 215,
-          unit: 'mg/dL',
-          referenceRange: '125 - 200',
-          referenceSource: 'standard',
-          status: 'high',
-          explanation: 'Total cholesterol measures the total amount of lipids carried in your blood stream. This result is outside the reference range and is worth discussing with your healthcare provider.'
-        },
-        {
-          name: 'Fasting Blood Glucose',
-          abbreviation: 'GLU',
-          value: 92,
-          unit: 'mg/dL',
-          referenceRange: '70 - 99',
-          referenceSource: 'report',
-          status: 'normal',
-          explanation: 'Fasting blood glucose measures the concentration of sugar present in your blood after fasting. Your result is within the healthy reference range.'
-        }
-      ],
-      disclaimer: 'This explanation is for educational purposes only and is not a medical diagnosis. Always consult a qualified healthcare professional regarding your laboratory results.'
-    };
-  }
+  const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
-  const anthropic = new Anthropic({ apiKey });
+const model = genAI.getGenerativeModel({
+  model: "gemini-2.5-flash"
+});
 
-  const makeApiCall = async (extraInstruction = '') => {
-    const userContent = extraInstruction
-      ? `${reportText}\n\nNote: ${extraInstruction}`
-      : reportText;
+ const makeApiCall = async (extraInstruction = '') => {
 
-    const response = await anthropic.messages.create({
-      model: 'claude-3-5-sonnet-20241022',
-      max_tokens: 2500,
-      system: SYSTEM_PROMPT,
-      messages: [{ role: 'user', content: userContent }],
-    });
+  const prompt = `
+${SYSTEM_PROMPT}
 
-    const contentBlock = response.content?.[0];
-    if (!contentBlock || contentBlock.type !== 'text') {
-      throw new Error('Invalid response structure from Anthropic API');
-    }
+Report Text:
+${reportText}
 
-    return contentBlock.text;
-  };
+${extraInstruction}
+`;
+
+  console.log("Sending request to Gemini...");
+
+  const response = await model.generateContent(prompt);
+
+  console.log("Gemini response received");
+
+  return response.response.text();
+};
 
   let rawResponse = '';
   try {
