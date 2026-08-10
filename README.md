@@ -2,11 +2,7 @@
 
 ## Tech Stack
 
-- React
-- Node.js
-- Express.js
-- MongoDB
-- OCR (Coming Soon)
+> **⚠️ Disclaimer:** This application is strictly for educational purposes and is **not** a medical diagnostic tool. Always consult a qualified healthcare professional regarding any medical concerns or laboratory results.
 
 ## Status
 
