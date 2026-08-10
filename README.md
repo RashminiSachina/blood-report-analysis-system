@@ -54,7 +54,7 @@ npm install
 Create a `.env` file in the `backend` directory based on the following template:
 ```env
 PORT=5000
-MONGO_URI=mongodb://localhost:27017/blood-report-analysis
+MONGO_URI=
 GEMINI_API_KEY=your_gemini_api_key_here
 ```
 
