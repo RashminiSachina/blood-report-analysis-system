@@ -104,14 +104,13 @@ cd backend
 npm install
 ```
 
-Create a `.env` file inside the `backend/` directory:
+Create a `.env` file inside the `backend/` directory by copying the provided example:
 
-```env
-PORT=5000
-MONGO_URI=mongodb://localhost:27017/blood-report-db
-JWT_SECRET=your_super_secret_jwt_key
-GEMINI_API_KEY=your_gemini_api_key_here
+```bash
+cp .env.example .env
 ```
+
+Then fill in your own values in the `.env` file.
 
 Start the backend development server:
 
