@@ -38,8 +38,6 @@
 
 ## 📸 Screenshots
 
-> To add screenshots: take a screenshot of each page and place the images in `docs/screenshots/`.
-
 | Page | Preview |
 |------|---------|
 | **Homepage** | ![Homepage](docs/screenshots/homepage.png) |
@@ -47,13 +45,6 @@
 | **Analysis Results** | ![Analysis Results](docs/screenshots/results.png) |
 | **Login** | ![Login](docs/screenshots/login.png) |
 | **Register** | ![Register](docs/screenshots/register.png) |
-
-**To add screenshots quickly:**
-1. Open `http://localhost:5173` in your browser
-2. Press `F12` → go to the **Elements** tab, or press `Windows + Shift + S` to snip
-3. Save images into `docs/screenshots/` with the names above
-4. The README will automatically embed them
-
 ---
 
 ## 🛠️ Tech Stack
