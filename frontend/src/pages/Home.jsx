@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Sparkles,
@@ -19,15 +19,13 @@ import styles from './Home.module.css';
 
 export default function Home() {
   const navigate = useNavigate();
+  const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('token'));
 
-  const handleUploadClick = () => {
-    const el = document.getElementById('upload-section');
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
-    } else {
-      navigate('/register');
-    }
-  };
+  useEffect(() => {
+    setIsLoggedIn(!!localStorage.getItem('token'));
+  }, []);
+
+  const goToUpload = () => navigate(isLoggedIn ? '/upload' : '/login');
 
   return (
     <div className={styles.page}>
@@ -47,7 +45,7 @@ export default function Home() {
               Upload your blood report and receive clear, easy-to-understand explanations for every parameter. Built to educate, not to diagnose — always bring your results to a healthcare professional.
             </p>
             <div className={styles.heroActions}>
-              <Button variant="primary" icon={ArrowRight} onClick={() => navigate('/register')}>
+              <Button variant="primary" icon={ArrowRight} onClick={goToUpload}>
                 Upload report
               </Button>
               <Button variant="ghost" onClick={() => {
@@ -217,7 +215,7 @@ export default function Home() {
             <Button
               variant="secondary"
               size="lg"
-              onClick={() => navigate('/register')}
+              onClick={goToUpload}
             >
               Get started
             </Button>

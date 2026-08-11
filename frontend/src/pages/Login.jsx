@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Mail, Lock, Droplet } from 'lucide-react';
 import Input from '../components/Input';
 import Button from '../components/Button';
@@ -7,6 +7,8 @@ import styles from './Login.module.css';
 
 export default function Login() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || '/';
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -74,7 +76,7 @@ export default function Login() {
       localStorage.setItem('user', JSON.stringify(data.user));
 
       setSuccessMsg('Log in successful! Redirecting...');
-      setTimeout(() => navigate('/'), 1000);
+      setTimeout(() => navigate(from, { replace: true }), 1000);
     } catch (err) {
       setErrors({ general: 'Unable to connect to server. Please try again.' });
     } finally {

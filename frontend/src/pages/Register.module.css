@@ -1,5 +1,5 @@
 .container {
-  min-height: calc(100vh - 72px);
+  min-height: calc(100vh - 68px);
   display: flex;
   background-color: var(--color-bg);
 }
@@ -7,7 +7,7 @@
 /* Left Brand Panel */
 .leftPanel {
   flex: 1;
-  background-color: var(--color-primary);
+  background: linear-gradient(145deg, #0D1529 0%, #111827 100%);
   color: var(--color-bg);
   padding: 64px 48px;
   display: flex;
@@ -15,43 +15,76 @@
   justify-content: space-between;
   position: relative;
   overflow: hidden;
+  border-right: 1px solid var(--color-border);
+}
+
+.leftPanel::before {
+  content: '';
+  position: absolute;
+  top: -80px;
+  right: -80px;
+  width: 360px;
+  height: 360px;
+  background: radial-gradient(circle, rgba(139,92,246,0.12) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.leftPanel::after {
+  content: '';
+  position: absolute;
+  bottom: -60px;
+  left: -60px;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(6,182,212,0.10) 0%, transparent 70%);
+  pointer-events: none;
 }
 
 .brandHeader {
   display: flex;
   align-items: center;
   gap: 12px;
-  font-size: 1.25rem;
+  font-size: 1.2rem;
   font-weight: 700;
-  color: #FFFFFF;
+  background: var(--color-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  position: relative;
+  z-index: 2;
 }
 
 .leftContent {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  max-width: 440px;
+  gap: 20px;
+  max-width: 420px;
   z-index: 2;
+  position: relative;
 }
 
 .welcomeHeading {
-  font-size: 2.5rem;
-  font-weight: 500;
-  color: var(--color-bg);
-  line-height: 1.2;
+  font-size: 2.75rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #FFFFFF 40%, #94A3B8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
 }
 
 .welcomeSubtitle {
-  font-size: 1.05rem;
-  color: #94A3B8;
-  line-height: 1.6;
+  font-size: 1.0rem;
+  color: var(--color-text-secondary);
+  line-height: 1.7;
 }
 
 .watermark {
   position: absolute;
   bottom: -60px;
   right: -60px;
-  color: rgba(255, 255, 255, 0.03);
+  color: rgba(255, 255, 255, 0.02);
   pointer-events: none;
   z-index: 1;
 }
@@ -63,35 +96,38 @@
   align-items: center;
   justify-content: center;
   padding: 48px 24px;
+  background: var(--color-bg);
 }
 
 .card {
-  background-color: var(--color-card);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  padding: 40px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--color-border-bright);
+  border-radius: var(--radius-xl);
+  padding: 44px 40px;
   width: 100%;
   max-width: 480px;
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--shadow-lg);
   display: flex;
   flex-direction: column;
   gap: 24px;
+  backdrop-filter: blur(12px);
 }
 
 .header {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
 }
 
 .title {
   font-size: 1.65rem;
-  font-weight: 500;
-  color: var(--color-primary);
+  font-weight: 700;
+  color: var(--color-text);
+  letter-spacing: -0.02em;
 }
 
 .subtitle {
-  font-size: 0.9375rem;
+  font-size: 0.9rem;
   color: var(--color-text-secondary);
 }
 
@@ -112,7 +148,7 @@
 .strengthBars {
   display: flex;
   gap: 6px;
-  height: 4px;
+  height: 3px;
   width: 100%;
 }
 
@@ -121,14 +157,14 @@
   height: 100%;
   border-radius: 2px;
   background-color: var(--color-border);
-  transition: background-color 0.2s ease;
+  transition: background-color 0.25s ease;
 }
 
 .strengthHeader {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 0.78125rem;
+  font-size: 0.75rem;
   color: var(--color-text-muted);
 }
 
@@ -136,27 +172,14 @@
   font-weight: 600;
 }
 
-/* Strength Colors */
-.weak {
-  background-color: var(--color-danger);
-}
-.weakText {
-  color: var(--color-danger);
-}
+.weak  { background-color: var(--color-danger); }
+.weakText { color: var(--color-danger); }
 
-.medium {
-  background-color: var(--color-primary);
-}
-.mediumText {
-  color: var(--color-primary);
-}
+.medium  { background-color: var(--color-amber); }
+.mediumText { color: var(--color-amber); }
 
-.strong {
-  background-color: var(--color-secondary);
-}
-.strongText {
-  color: var(--color-secondary);
-}
+.strong  { background-color: var(--color-success); }
+.strongText { color: var(--color-success); }
 
 .checkboxContainer {
   display: flex;
@@ -168,13 +191,13 @@
   display: flex;
   align-items: flex-start;
   gap: 10px;
-  font-size: 0.8875rem;
+  font-size: 0.875rem;
   color: var(--color-text-secondary);
   cursor: pointer;
 }
 
 .checkbox {
-  accent-color: var(--color-secondary);
+  accent-color: var(--color-primary);
   width: 16px;
   height: 16px;
   margin-top: 3px;
@@ -182,23 +205,24 @@
 }
 
 .link {
-  color: var(--color-secondary);
+  color: var(--color-primary);
   font-weight: 500;
   text-decoration: none;
+  transition: color 0.2s;
 }
 
 .link:hover {
-  text-decoration: underline;
+  color: var(--color-secondary);
 }
 
 .errorText {
-  font-size: 0.8125rem;
+  font-size: 0.8rem;
   color: var(--color-danger);
 }
 
 .footerText {
   text-align: center;
-  font-size: 0.8875rem;
+  font-size: 0.875rem;
   color: var(--color-text-secondary);
 }
 
@@ -211,6 +235,7 @@
 
   .leftPanel {
     padding: 40px 24px;
+    min-height: 220px;
   }
 
   .welcomeHeading {

@@ -97,7 +97,7 @@ async function analyzeReport(req, res) {
     const extractedText = await extractTextFromFile(filePath, mimeType);
 
     // Step 2: Send text to AI Service
-    const aiResult = await analyzeReportText(extractedText);
+    const aiResult = await analyzeReportText(extractedText, filePath, mimeType);
 
     // Step 3: Return structured analysis response
     return res.status(200).json({

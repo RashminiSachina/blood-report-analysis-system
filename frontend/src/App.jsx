@@ -7,6 +7,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import UploadReport from './pages/UploadReport';
 import AnalysisResults from './pages/AnalysisResults';
+import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
   return (
@@ -18,8 +19,8 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/upload" element={<UploadReport />} />
-            <Route path="/results/:id" element={<AnalysisResults />} />
+            <Route path="/upload" element={<ProtectedRoute><UploadReport /></ProtectedRoute>} />
+            <Route path="/results/:id" element={<ProtectedRoute><AnalysisResults /></ProtectedRoute>} />
           </Routes>
         </main>
         <Footer />

@@ -1,8 +1,9 @@
 .footer {
-  background-color: var(--color-card);
+  background: rgba(10,13,20,0.8);
   border-top: 1px solid var(--color-border);
   padding: 48px 0 32px;
   margin-top: auto;
+  backdrop-filter: blur(10px);
 }
 
 .container {
@@ -27,15 +28,21 @@
   align-items: center;
   gap: 10px;
   text-decoration: none;
-  color: var(--color-primary);
-  font-size: 1.2rem;
+  font-size: 1.15rem;
   font-weight: 700;
+  background: var(--color-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .logoIcon {
-  color: var(--color-secondary);
+  color: var(--color-primary);
   display: flex;
   align-items: center;
+  -webkit-text-fill-color: initial;
+  background: none;
+  filter: drop-shadow(0 0 6px rgba(6,182,212,0.4));
 }
 
 .links {
@@ -46,9 +53,9 @@
 }
 
 .link {
-  font-size: 0.8875rem;
-  color: var(--color-text-secondary);
-  transition: color 0.15s ease;
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+  transition: color 0.2s ease;
   text-decoration: none;
 }
 
@@ -58,19 +65,19 @@
 
 .disclaimerBox {
   padding-top: 24px;
-  border-top: 1px solid var(--color-border-soft);
+  border-top: 1px solid var(--color-border);
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
 
 .disclaimerText {
-  font-size: 0.8125rem;
+  font-size: 0.8rem;
   color: var(--color-text-muted);
   line-height: 1.6;
 }
 
 .copyright {
-  font-size: 0.8125rem;
+  font-size: 0.8rem;
   color: var(--color-text-muted);
 }
