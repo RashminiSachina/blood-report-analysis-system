@@ -1,98 +1,323 @@
-# 🩸 Blood Report Analysis System
+<div align="center">
 
-An intelligent, full-stack web application designed to help users understand their laboratory blood reports. Users can upload their blood test results (PDF or images), and the system extracts data using OCR and analyzes it via the Google Gemini API to provide simple, educational explanations of the tested parameters.
+# 🩸 VitalRead — Blood Report Analysis System
 
-> **⚠️ Disclaimer:** This application is strictly for educational purposes and is **not** a medical diagnostic tool. Always consult a qualified healthcare professional regarding any medical concerns or laboratory results.
+**An AI-powered full-stack application that transforms complex blood reports into clear, educational health insights.**
+
+[![Node.js](https://img.shields.io/badge/Node.js-20.x-339933?logo=node.js&logoColor=white)](https://nodejs.org)
+[![React](https://img.shields.io/badge/React-18.x-61DAFB?logo=react&logoColor=white)](https://reactjs.org)
+[![Gemini AI](https://img.shields.io/badge/Google%20Gemini-3.5%20Flash-4285F4?logo=google&logoColor=white)](https://ai.google.dev)
+[![MongoDB](https://img.shields.io/badge/MongoDB-7.x-47A248?logo=mongodb&logoColor=white)](https://mongodb.com)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
+[Features](#-features) · [Screenshots](#-screenshots) · [Tech Stack](#-tech-stack) · [Setup](#️-installation--setup) · [API](#-api-reference) · [Project Structure](#-project-structure)
+
+</div>
+
+---
+
+> **⚠️ Medical Disclaimer:** This application is designed **strictly for educational purposes** and is **not** a medical diagnostic tool. Always consult a qualified healthcare professional for any medical concerns or before acting on laboratory results.
+
+---
 
 ## ✨ Features
 
-- **Multi-Format Uploads:** Supports uploading PDF documents and images (JPG, PNG).
-- **Text Extraction & OCR:** Utilizes `pdf-parse` for text-based PDFs and `tesseract.js` OCR for extracting text from images.
-- **AI-Powered Analysis:** Integrates Google's Gemini API (`gemini-3.5-flash`) to identify lab parameters, compare them against standard reference ranges, and generate human-readable context.
-- **Visual Results Dashboard:** Beautiful, responsive React frontend displaying:
-  - An overarching summary banner.
-  - Parameter cards sorted by status (normal, high, low) with clear, color-coded indicators.
-  - Quick, simple explanations for each laboratory parameter.
-- **Secure File Handling:** Uses `multer` for safe file uploads on the Express backend.
+| Feature | Description |
+|---------|-------------|
+| 📄 **Multi-Format Upload** | Supports PDF documents, JPG, and PNG images |
+| 🔍 **Multimodal OCR + AI** | Combines Tesseract.js OCR with Gemini vision analysis of the original image |
+| 🧮 **Decimal-Precise Extraction** | Programmatic validator ensures `1.8` is never read as `18` |
+| 📊 **Complete Parameter Detection** | Extracts ALL parameters including Hemoglobin, MCH, RDW, Eosinophils, MPV, Serum Iron, TIBC, CRP, and more |
+| ✅ **Mathematically Verified Status** | Reference ranges parsed and validated in code — AI cannot misclassify Normal/High/Low |
+| 🔢 **Dynamic Parameter Counts** | Total and out-of-range counts calculated programmatically, never hardcoded |
+| 🔐 **Secure Authentication** | JWT-based login/register with protected routes |
+| 🎨 **Premium Dark UI** | Modern glassmorphism design with cyan/violet gradients and micro-animations |
+| 📱 **Fully Responsive** | Works across desktop, tablet, and mobile |
 
-## 🚀 Technologies Used
+---
+
+## 📸 Screenshots
+
+> To add screenshots: take a screenshot of each page and place the images in `docs/screenshots/`.
+
+| Page | Preview |
+|------|---------|
+| **Homepage** | `docs/screenshots/homepage.png` |
+| **Upload Report** | `docs/screenshots/upload.png` |
+| **Analysis Results** | `docs/screenshots/results.png` |
+| **Login** | `docs/screenshots/login.png` |
+| **Register** | `docs/screenshots/register.png` |
+
+**To add screenshots quickly:**
+1. Open `http://localhost:5173` in your browser
+2. Press `F12` → go to the **Elements** tab, or press `Windows + Shift + S` to snip
+3. Save images into `docs/screenshots/` with the names above
+4. The README will automatically embed them
+
+---
+
+## 🛠️ Tech Stack
 
 ### Frontend
-- **Framework:** React + Vite
-- **Styling:** CSS Modules
-- **Icons:** Lucide React
-- **Routing:** React Router
+| Technology | Purpose |
+|-----------|---------|
+| React 18 + Vite | UI framework and build tool |
+| React Router v6 | Client-side routing with protected routes |
+| CSS Modules | Scoped styling with dark-mode design system |
+| Lucide React | Icon library |
 
 ### Backend
-- **Server:** Node.js, Express.js
-- **Database:** MongoDB, Mongoose
-- **File Uploads:** Multer
-- **OCR / Parsing:** Tesseract.js, pdf-parse
-- **AI Integration:** `@google/generative-ai` (Gemini API)
+| Technology | Purpose |
+|-----------|---------|
+| Node.js + Express.js | REST API server |
+| MongoDB + Mongoose | User data persistence |
+| Multer | Secure file upload middleware |
+| Tesseract.js | OCR for image blood reports |
+| pdf-parse | Text extraction for PDF reports |
+| @google/generative-ai | Gemini 3.5 Flash multimodal AI analysis |
+| bcryptjs + JWT | Secure authentication |
 
-## ⚙️ Prerequisites
+---
 
-Before you begin, ensure you have the following installed:
-- [Node.js](https://nodejs.org/en/) (v16 or higher)
-- [MongoDB](https://www.mongodb.com/) (running locally or a MongoDB Atlas URI)
-- A **Google Gemini API Key** (Get one from [Google AI Studio](https://aistudio.google.com/))
+## ⚙️ Installation & Setup
 
-## 🛠️ Installation & Setup
+### Prerequisites
+- [Node.js](https://nodejs.org/) v18 or higher
+- [MongoDB](https://www.mongodb.com/) (local or [MongoDB Atlas](https://cloud.mongodb.com/))
+- A **Google Gemini API Key** from [Google AI Studio](https://aistudio.google.com/)
 
-### 1. Clone the repository
+---
+
+### 1. Clone the Repository
+
 ```bash
 git clone https://github.com/RashminiSachina/blood-report-analysis-system.git
 cd blood-report-analysis-system
 ```
 
+---
+
 ### 2. Backend Setup
+
 ```bash
 cd backend
 npm install
 ```
 
-Create a `.env` file in the `backend` directory based on the following template:
+Create a `.env` file inside the `backend/` directory:
+
 ```env
 PORT=5000
-MONGO_URI=
+MONGO_URI=mongodb://localhost:27017/blood-report-db
+JWT_SECRET=your_super_secret_jwt_key
 GEMINI_API_KEY=your_gemini_api_key_here
 ```
 
-Start the backend server:
+Start the backend development server:
+
 ```bash
 npm run dev
 ```
 
+The backend will be running at: `http://localhost:5000`
+
+---
+
 ### 3. Frontend Setup
-Open a new terminal window/tab:
+
+Open a **new terminal** in the project root:
+
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
 
-### 4. Open Application
-Navigate to `http://localhost:5173` (or your assigned Vite port) in your browser.
+The frontend will be running at: `http://localhost:5173`
+
+---
+
+### 4. Open the Application
+
+Visit **http://localhost:5173** in your browser.
+
+1. Register an account or log in
+2. Click **Upload Report**
+3. Upload a blood report PNG, JPG, or PDF
+4. Wait for extraction and analysis (15–30 seconds)
+5. View your complete results with educational explanations
+
+---
+
+## 📡 API Reference
+
+### Authentication
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `POST` | `/api/auth/register` | Register a new user |
+| `POST` | `/api/auth/login` | Log in, receive JWT token |
+
+### Reports
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `POST` | `/api/reports/upload` | Upload a report file (multipart/form-data) |
+| `POST` | `/api/reports/:id/analyze` | Run AI analysis on uploaded report |
+
+### Example — Upload a Report
+
+```bash
+curl -X POST http://localhost:5000/api/reports/upload \
+  -H "Authorization: Bearer <your_token>" \
+  -F "report=@/path/to/blood_report.jpg"
+```
+
+### Example — Analyze a Report
+
+```bash
+curl -X POST http://localhost:5000/api/reports/report-12345.jpg/analyze \
+  -H "Content-Type: application/json"
+```
+
+### Example Response
+
+```json
+{
+  "success": true,
+  "summary": "All 18 identified laboratory parameters are within their reference ranges.",
+  "parameters": [
+    {
+      "name": "C-Reactive Protein",
+      "abbreviation": "CRP",
+      "value": 1.8,
+      "unit": "mg/L",
+      "referenceRange": "0 - 5",
+      "referenceLow": 0,
+      "referenceHigh": 5,
+      "referenceSource": "report",
+      "status": "normal",
+      "explanation": "C-Reactive Protein measures inflammation in the body. This value of 1.8 mg/L is within the expected range of 0 - 5 mg/L."
+    }
+  ],
+  "disclaimer": "This explanation is for educational purposes only..."
+}
+```
+
+---
 
 ## 📁 Project Structure
 
 ```
 blood-report-analysis-system/
 ├── backend/
-│   ├── config/          # Database configuration
-│   ├── controllers/     # Route handers (upload, analysis)
-│   ├── models/          # Mongoose schemas
-│   ├── routes/          # Express API routes
-│   ├── services/        # AI Service, Extraction (OCR) Service
-│   └── app.js           # Express app entry point
-└── frontend/
-    ├── src/
-    │   ├── components/  # Reusable UI components (Cards, Buttons, etc.)
-    │   ├── pages/       # Page views (Upload, AnalysisResults)
-    │   └── App.jsx      # Main React application component
-    └── package.json
+│   ├── config/
+│   │   └── db.js                  # MongoDB connection
+│   ├── controllers/
+│   │   └── analysisController.js  # Upload & analysis route handlers
+│   ├── models/
+│   │   └── User.js                # Mongoose user schema
+│   ├── routes/
+│   │   ├── auth.js                # Auth routes (register, login)
+│   │   └── analysisRoutes.js      # Report upload & analysis routes
+│   ├── services/
+│   │   ├── aiService.js           # Gemini API + multimodal analysis + validator
+│   │   └── extractionService.js   # OCR (Tesseract) + PDF text extraction
+│   ├── uploads/                   # Uploaded report files (gitignored)
+│   └── app.js                     # Express app entry point
+│
+├── frontend/
+│   ├── public/
+│   │   └── homepage_bg.png        # AI-generated hero background
+│   └── src/
+│       ├── components/
+│       │   ├── Button.jsx/.module.css
+│       │   ├── FeatureCard.jsx/.module.css
+│       │   ├── Footer.jsx/.module.css
+│       │   ├── Input.jsx/.module.css
+│       │   ├── Navbar.jsx/.module.css
+│       │   ├── ParameterCard.jsx/.module.css
+│       │   ├── ProtectedRoute.jsx  # Auth guard for protected pages
+│       │   ├── SummaryBanner.jsx/.module.css
+│       │   └── UploadBox.jsx/.module.css
+│       ├── pages/
+│       │   ├── AnalysisResults.jsx/.module.css
+│       │   ├── Home.jsx/.module.css
+│       │   ├── Login.jsx/.module.css
+│       │   ├── Register.jsx/.module.css
+│       │   └── UploadReport.jsx/.module.css
+│       ├── App.jsx                 # Router configuration
+│       └── index.css               # Global CSS design tokens
+│
+├── docs/
+│   └── screenshots/               # App screenshots for README
+└── README.md
 ```
+
+---
+
+## 🔒 Authentication Flow
+
+```
+User visits /upload
+    ↓
+Not logged in? → Redirect to /login (with return URL saved)
+    ↓
+Login success → Redirect back to /upload automatically
+    ↓
+JWT token stored in localStorage
+    ↓
+Navbar shows: Username + Logout button
+    ↓
+Logout → Token cleared → Navbar reverts to Login/Register
+```
+
+---
+
+## 🧠 Analysis Pipeline
+
+```
+User uploads file
+    ↓
+Multer saves file to /uploads
+    ↓
+Tesseract.js (OCR) or pdf-parse extracts raw text
+    ↓
+Gemini 3.5 Flash receives OCR text + original image (multimodal)
+    ↓
+AI returns structured JSON with parameters, values, units, ranges, status
+    ↓
+Programmatic validator parses reference ranges mathematically
+    ↓
+Validator overrides any incorrect AI status (Normal/High/Low)
+    ↓
+Dynamic summary generated: "18 params checked · All normal"
+    ↓
+Frontend renders ParameterCard for every extracted parameter
+```
+
+---
 
 ## 🤝 Contributing
 
-Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](https://github.com/RashminiSachina/blood-report-analysis-system/issues).
+Contributions, issues, and feature requests are welcome!
+
+1. Fork the repository
+2. Create your feature branch: `git checkout -b feature/amazing-feature`
+3. Commit your changes: `git commit -m 'Add amazing feature'`
+4. Push to the branch: `git push origin feature/amazing-feature`
+5. Open a Pull Request
+
+---
+
+## 📃 License
+
+This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
+
+---
+
+<div align="center">
+
+Made with ❤️ by [RashminiSachina](https://github.com/RashminiSachina)
+
+</div>
