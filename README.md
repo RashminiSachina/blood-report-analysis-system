@@ -42,11 +42,11 @@
 
 | Page | Preview |
 |------|---------|
-| **Homepage** | `docs/screenshots/homepage.png` |
-| **Upload Report** | `docs/screenshots/upload.png` |
-| **Analysis Results** | `docs/screenshots/results.png` |
-| **Login** | `docs/screenshots/login.png` |
-| **Register** | `docs/screenshots/register.png` |
+| **Homepage** | ![Homepage](docs/screenshots/homepage.png) |
+| **Upload Report** | ![Upload Report](docs/screenshots/upload.png) |
+| **Analysis Results** | ![Analysis Results](docs/screenshots/results.png) |
+| **Login** | ![Login](docs/screenshots/login.png) |
+| **Register** | ![Register](docs/screenshots/register.png) |
 
 **To add screenshots quickly:**
 1. Open `http://localhost:5173` in your browser
