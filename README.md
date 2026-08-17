@@ -43,12 +43,12 @@
 
 | Page | Preview |
 |------|---------|
-| **Homepage** | <img src="./docs/screenshots/homepage.png" width="600" alt="Homepage" /> |
-| **Upload Report** | <img src="./docs/screenshots/upload.png" width="600" alt="Upload Report" /> |
-| **Analysis Results** | <img src="./docs/screenshots/results.png" width="600" alt="Analysis Results" /> |
-| **Login** | <img src="./docs/screenshots/login.png" width="600" alt="Login" /> |
-| **Register** | <img src="./docs/screenshots/register.png" width="600" alt="Register" /> |
-| **Report History** | <img src="./docs/screenshots/history.png" width="600" alt="Report History" /> |
+| **Homepage** | ![Homepage](docs/screenshots/homepage.png) |
+| **Upload Report** | ![Upload Report](docs/screenshots/upload.png) |
+| **Analysis Results** | ![Analysis Results](docs/screenshots/results.png) |
+| **Login** | ![Login](docs/screenshots/login.png) |
+| **Register** | ![Register](docs/screenshots/register.png) |
+| **Report History** | ![Report History](docs/screenshots/history.png) |
 
 ---
 
