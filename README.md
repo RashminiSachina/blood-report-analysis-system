@@ -49,6 +49,7 @@
 | **Login** | <img src="./docs/screenshots/login.png" width="600" alt="Login" /> |
 | **Register** | <img src="./docs/screenshots/register.png" width="600" alt="Register" /> |
 | **Report History** | <img src="./docs/screenshots/history.png" width="600" alt="Report History" /> |
+
 ---
 
 ## 🛠️ Tech Stack
