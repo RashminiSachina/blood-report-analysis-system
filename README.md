@@ -43,12 +43,12 @@
 
 | Page | Preview |
 |------|---------|
-| **Homepage** | ![Homepage](docs/screenshots/homepage.png) |
-| **Upload Report** | ![Upload Report](docs/screenshots/upload.png) |
-| **Analysis Results** | ![Analysis Results](docs/screenshots/results.png) |
-| **Login** | ![Login](docs/screenshots/login.png) |
-| **Register** | ![Register](docs/screenshots/register.png) |
-| **Report History** | ![Report History](docs/screenshots/history.png) |
+| **Homepage** | ![Homepage](https://raw.githubusercontent.com/RashminiSachina/blood-report-analysis-system/main/docs/screenshots/homepage.png) |
+| **Upload Report** | ![Upload Report](https://raw.githubusercontent.com/RashminiSachina/blood-report-analysis-system/main/docs/screenshots/upload.png) |
+| **Analysis Results** | ![Analysis Results](https://raw.githubusercontent.com/RashminiSachina/blood-report-analysis-system/main/docs/screenshots/results.png) |
+| **Login** | ![Login](https://raw.githubusercontent.com/RashminiSachina/blood-report-analysis-system/main/docs/screenshots/login.png) |
+| **Register** | ![Register](https://raw.githubusercontent.com/RashminiSachina/blood-report-analysis-system/main/docs/screenshots/register.png) |
+| **Report History** | ![Report History](https://raw.githubusercontent.com/RashminiSachina/blood-report-analysis-system/main/docs/screenshots/history.png) |
 
 ---
 
