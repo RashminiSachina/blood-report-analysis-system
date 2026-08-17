@@ -61,8 +61,12 @@ export default function UploadReport() {
       const formData = new FormData();
       formData.append('report', file);
 
+      const token = localStorage.getItem('token');
       const response = await fetch(`${API_BASE_URL}/api/reports/upload`, {
         method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
         body: formData,
       });
 

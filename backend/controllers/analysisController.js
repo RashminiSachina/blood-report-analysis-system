@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const { extractTextFromFile } = require('../services/extractionService');
 const { analyzeReportText } = require('../services/aiService');
+const Report = require('../models/Report');
 
 // Simple in-memory report cache for fast lookup alongside filesystem
 const reportStore = new Map();
@@ -54,6 +55,18 @@ async function analyzeReport(req, res) {
   const { id } = req.params;
 
   try {
+    // Check if the report is already analyzed and saved in the DB
+    const existingReport = await Report.findOne({ systemFileName: id, user: req.user._id });
+    if (existingReport) {
+      return res.status(200).json({
+        success: true,
+        reportId: existingReport._id,
+        summary: existingReport.summary,
+        parameters: existingReport.parameters,
+        disclaimer: existingReport.disclaimer,
+      });
+    }
+
     const uploadsDir = path.join(__dirname, '..', 'uploads');
     let filePath = null;
     let mimeType = '';
@@ -99,14 +112,26 @@ async function analyzeReport(req, res) {
     // Step 2: Send text to AI Service
     const aiResult = await analyzeReportText(extractedText, filePath, mimeType);
 
+    // Provide default disclaimer if not present
+    const disclaimerObj = aiResult.disclaimer || 'This is an educational summary, not a medical diagnosis. Always discuss your results with a qualified healthcare professional.';
+
+    // Create Report in DB
+    const newReport = await Report.create({
+      user: req.user._id,
+      originalFileName: reportStore.has(id) ? reportStore.get(id).originalName : id,
+      systemFileName: id,
+      summary: aiResult.summary || 'Summary unavailable.',
+      parameters: aiResult.parameters || [],
+      disclaimer: disclaimerObj,
+    });
+
     // Step 3: Return structured analysis response
     return res.status(200).json({
       success: true,
-      summary: aiResult.summary || 'Summary unavailable.',
-      parameters: aiResult.parameters || [],
-      disclaimer:
-        aiResult.disclaimer ||
-        'This is an educational summary, not a medical diagnosis. Always discuss your results with a qualified healthcare professional.',
+      reportId: newReport._id,
+      summary: newReport.summary,
+      parameters: newReport.parameters,
+      disclaimer: newReport.disclaimer,
     });
   } catch (err) {
     console.error('[analysisController] Analysis error:', err.message);
@@ -124,7 +149,22 @@ async function analyzeReport(req, res) {
   }
 }
 
+/**
+ * Fetch report history for a logged in user.
+ * GET /api/reports/history
+ */
+async function getReportHistory(req, res) {
+  try {
+    const reports = await Report.find({ user: req.user._id }).sort({ createdAt: -1 });
+    res.status(200).json({ success: true, reports });
+  } catch (err) {
+    console.error('[analysisController] Get history error:', err.message);
+    res.status(500).json({ success: false, message: 'Failed to fetch report history' });
+  }
+}
+
 module.exports = {
   uploadReportFile,
   analyzeReport,
+  getReportHistory,
 };

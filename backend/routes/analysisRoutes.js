@@ -3,7 +3,8 @@ const router = express.Router();
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
-const { uploadReportFile, analyzeReport } = require('../controllers/analysisController');
+const { uploadReportFile, analyzeReport, getReportHistory } = require('../controllers/analysisController');
+const { protect } = require('../middleware/authMiddleware');
 
 // Ensure uploads directory exists
 const uploadsDir = path.join(__dirname, '..', 'uploads');
@@ -42,7 +43,8 @@ const upload = multer({
 });
 
 // Routes
-router.post('/upload', upload.single('report'), uploadReportFile);
-router.post('/:id/analyze', analyzeReport);
+router.post('/upload', protect, upload.single('report'), uploadReportFile);
+router.post('/:id/analyze', protect, analyzeReport);
+router.get('/history', protect, getReportHistory);
 
 module.exports = router;

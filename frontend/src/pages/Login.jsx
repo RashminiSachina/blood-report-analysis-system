@@ -4,6 +4,7 @@ import { Mail, Lock, Droplet } from 'lucide-react';
 import Input from '../components/Input';
 import Button from '../components/Button';
 import styles from './Login.module.css';
+import { GoogleLogin } from '@react-oauth/google';
 
 export default function Login() {
   const navigate = useNavigate();
@@ -80,6 +81,37 @@ export default function Login() {
     } catch (err) {
       setErrors({ general: 'Unable to connect to server. Please try again.' });
     } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGoogleSuccess = async (credentialResponse) => {
+    setLoading(true);
+    setSuccessMsg('');
+    try {
+      const response = await fetch('http://localhost:5000/api/auth/google', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          idToken: credentialResponse.credential,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setErrors({ general: data.message || 'Google Login failed.' });
+        setLoading(false);
+        return;
+      }
+
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('user', JSON.stringify(data.user));
+
+      setSuccessMsg('Google Log in successful! Redirecting...');
+      setTimeout(() => navigate(from, { replace: true }), 1000);
+    } catch (err) {
+      setErrors({ general: 'Unable to connect to server. Please try again.' });
       setLoading(false);
     }
   };
@@ -187,19 +219,15 @@ export default function Login() {
             <span className={styles.dividerSpan}>or</span>
           </div>
 
-          <Button
-            variant="secondary"
-            fullWidth
-            onClick={() => console.log('Google Auth clicked (UI simulation)')}
-          >
-            <svg className={styles.googleIcon} viewBox="0 0 24 24">
-              <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"/>
-              <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.29v3.15C3.26 21.3 7.31 24 12 24z"/>
-              <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.29C.47 8.21 0 10.05 0 12s.47 3.79 1.29 5.42l3.99-3.15z"/>
-              <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.31 0 3.26 2.7 1.29 6.58l3.99 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/>
-            </svg>
-            Continue with Google
-          </Button>
+          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
+            <GoogleLogin
+              onSuccess={handleGoogleSuccess}
+              onError={() => {
+                console.log('Google Login Failed');
+                setErrors({ general: 'Google Login Failed. Please try again.' });
+              }}
+            />
+          </div>
 
           <p className={styles.footerText}>
             Don't have an account?{' '}

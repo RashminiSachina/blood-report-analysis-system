@@ -84,12 +84,22 @@ export default function Navbar() {
               </>
             )}
             {user && (
-              <li>
-                <span className={styles.navLink} style={{ display: 'flex', alignItems: 'center', gap: '6px', cursor: 'default', opacity: 0.8 }}>
-                  <User size={15} />
-                  {user.name || user.email || 'Account'}
-                </span>
-              </li>
+              <>
+                <li>
+                  <NavLink
+                    to="/history"
+                    className={({ isActive }) => isActive ? `${styles.navLink} ${styles.activeLink}` : styles.navLink}
+                  >
+                    History
+                  </NavLink>
+                </li>
+                <li>
+                  <span className={styles.navLink} style={{ display: 'flex', alignItems: 'center', gap: '6px', cursor: 'default', opacity: 0.8 }}>
+                    <User size={15} />
+                    {user.name || user.email || 'Account'}
+                  </span>
+                </li>
+              </>
             )}
           </ul>
         </nav>
@@ -151,6 +161,9 @@ export default function Navbar() {
           </ul>
           {user ? (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              <Link to="/history" className={styles.mobileNavLink} onClick={closeMobile} style={{ textAlign: 'center', display: 'block', padding: '10px' }}>
+                History
+              </Link>
               <Button variant="primary" icon={ArrowRight} fullWidth onClick={handleUploadClick}>
                 Upload report
               </Button>

@@ -17,8 +17,16 @@ const userSchema = new mongoose.Schema(
     },
     password: {
       type: String,
-      required: [true, "Password is required"],
       minlength: [8, "Password must be at least 8 characters"],
+    },
+    googleId: {
+      type: String,
+      sparse: true,
+      unique: true,
+    },
+    authProvider: {
+      type: String,
+      default: "local",
     },
   },
   { timestamps: true }
@@ -26,13 +34,14 @@ const userSchema = new mongoose.Schema(
 
 // Hash password before saving (Mongoose v9 async middleware: no `next` parameter)
 userSchema.pre("save", async function () {
-  if (!this.isModified("password")) return;
+  if (!this.isModified("password") || !this.password) return;
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
 });
 
 // Compare plain password with hashed
 userSchema.methods.matchPassword = async function (enteredPassword) {
+  if (!this.password) return false;
   return await bcrypt.compare(enteredPassword, this.password);
 };
 

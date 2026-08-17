@@ -23,10 +23,12 @@ export default function AnalysisResults() {
     const startTime = Date.now();
 
     try {
+      const token = localStorage.getItem('token');
       const response = await fetch(`${API_BASE_URL}/api/reports/${id}/analyze`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
         },
       });
 

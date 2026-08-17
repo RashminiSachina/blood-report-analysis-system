@@ -2,6 +2,9 @@ const express = require("express");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
+const { OAuth2Client } = require("google-auth-library");
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+
 
 // Helper to generate JWT
 const generateToken = (userId) => {
@@ -91,6 +94,47 @@ router.post("/login", async (req, res) => {
   } catch (error) {
     console.error("Login error:", error.message);
     return res.status(500).json({ message: "Server error. Please try again." });
+  }
+});
+
+// @route   POST /api/auth/google
+// @desc    Authenticate user with Google idToken
+// @access  Public
+router.post("/google", async (req, res) => {
+  try {
+    const { idToken } = req.body;
+    if (!idToken) return res.status(400).json({ message: "No ID token provided" });
+
+    const ticket = await client.verifyIdToken({
+      idToken,
+      audience: process.env.GOOGLE_CLIENT_ID,
+    });
+    
+    const payload = ticket.getPayload();
+    const { sub: googleId, email, name } = payload;
+    
+    let user = await User.findOne({ email });
+    if (!user) {
+      user = await User.create({ name, email, googleId, authProvider: "google" });
+    } else if (!user.googleId) {
+      // Link existing account with Google
+      user.googleId = googleId;
+      await user.save();
+    }
+    
+    return res.status(200).json({
+      message: "Google login successful",
+      token: generateToken(user._id),
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        authProvider: user.authProvider || "google",
+      },
+    });
+  } catch (error) {
+    console.error("Google auth error:", error.message);
+    return res.status(401).json({ message: "Google authentication failed" });
   }
 });
 

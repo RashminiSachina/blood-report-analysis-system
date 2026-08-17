@@ -4,6 +4,7 @@ import { User, Mail, Lock, Droplet } from 'lucide-react';
 import Input from '../components/Input';
 import Button from '../components/Button';
 import styles from './Register.module.css';
+import { GoogleLogin } from '@react-oauth/google';
 
 export default function Register() {
   const navigate = useNavigate();
@@ -108,6 +109,37 @@ export default function Register() {
     } catch (err) {
       setErrors({ general: 'Unable to connect to server. Please try again.' });
     } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGoogleSuccess = async (credentialResponse) => {
+    setLoading(true);
+    setSuccessMsg('');
+    try {
+      const response = await fetch('http://localhost:5000/api/auth/google', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          idToken: credentialResponse.credential,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setErrors({ general: data.message || 'Google Registration failed.' });
+        setLoading(false);
+        return;
+      }
+
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('user', JSON.stringify(data.user));
+
+      setSuccessMsg('Google Account linked successfully! Redirecting...');
+      setTimeout(() => navigate('/'), 1000);
+    } catch (err) {
+      setErrors({ general: 'Unable to connect to server. Please try again.' });
       setLoading(false);
     }
   };
@@ -254,6 +286,20 @@ export default function Register() {
               Create account
             </Button>
           </form>
+
+          <div style={{ textAlign: 'center', margin: '20px 0', color: 'var(--color-text-light)' }}>
+            <span>or</span>
+          </div>
+
+          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
+            <GoogleLogin
+              onSuccess={handleGoogleSuccess}
+              onError={() => {
+                console.log('Google Registration Failed');
+                setErrors({ general: 'Google Registration Failed. Please try again.' });
+              }}
+            />
+          </div>
 
           <p className={styles.footerText}>
             Already have an account?{' '}
