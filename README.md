@@ -30,7 +30,10 @@
 | 📊 **Complete Parameter Detection** | Extracts ALL parameters including Hemoglobin, MCH, RDW, Eosinophils, MPV, Serum Iron, TIBC, CRP, and more |
 | ✅ **Mathematically Verified Status** | Reference ranges parsed and validated in code — AI cannot misclassify Normal/High/Low |
 | 🔢 **Dynamic Parameter Counts** | Total and out-of-range counts calculated programmatically, never hardcoded |
-| 🔐 **Secure Authentication** | JWT-based login/register with protected routes |
+| 🛡️ **Google OAuth** | Fast and secure one-click sign in alongside standard local auth |
+| 📧 **Email OTP Recovery** | Secure password reset flow utilizing 6-digit OTP sent via Nodemailer |
+| 🕰️ **History Dashboard** | Instantly review your past AI analyses saved securely in MongoDB |
+| 🔐 **Secure Authentication** | JWT-based protection across routes |
 | 🎨 **Premium Dark UI** | Modern glassmorphism design with cyan/violet gradients and micro-animations |
 | 📱 **Fully Responsive** | Works across desktop, tablet, and mobile |
 
@@ -45,6 +48,7 @@
 | **Analysis Results** | ![Analysis Results](docs/screenshots/results.png) |
 | **Login** | ![Login](docs/screenshots/login.png) |
 | **Register** | ![Register](docs/screenshots/register.png) |
+| **Report History** | ![Report History](docs/screenshots/history.png) |
 ---
 
 ## 🛠️ Tech Stack
@@ -67,6 +71,8 @@
 | pdf-parse | Text extraction for PDF reports |
 | @google/generative-ai | Gemini 3.5 Flash multimodal AI analysis |
 | bcryptjs + JWT | Secure authentication |
+| Google OAuth2 | Third-party Google Login integration |
+| Nodemailer | Secure SMTP email sending for OTPs |
 
 ---
 
@@ -147,6 +153,9 @@ Visit **http://localhost:5173** in your browser.
 |--------|----------|-------------|
 | `POST` | `/api/auth/register` | Register a new user |
 | `POST` | `/api/auth/login` | Log in, receive JWT token |
+| `POST` | `/api/auth/google` | Log in or Register with Google OAuth |
+| `POST` | `/api/auth/forgot-password` | Generate and email 6-digit OTP |
+| `POST` | `/api/auth/reset-password` | Verify OTP and reset password |
 
 ### Reports
 
@@ -154,6 +163,7 @@ Visit **http://localhost:5173** in your browser.
 |--------|----------|-------------|
 | `POST` | `/api/reports/upload` | Upload a report file (multipart/form-data) |
 | `POST` | `/api/reports/:id/analyze` | Run AI analysis on uploaded report |
+| `GET`  | `/api/reports/history` | Fetch logged-in user's past reports |
 
 ### Example — Upload a Report
 
@@ -206,13 +216,15 @@ blood-report-analysis-system/
 │   ├── controllers/
 │   │   └── analysisController.js  # Upload & analysis route handlers
 │   ├── models/
-│   │   └── User.js                # Mongoose user schema
+│   │   ├── User.js                # Mongoose user schema
+│   │   └── Report.js              # Mongoose report schema
 │   ├── routes/
-│   │   ├── auth.js                # Auth routes (register, login)
-│   │   └── analysisRoutes.js      # Report upload & analysis routes
+│   │   ├── auth.js                # Auth & Password reset routes
+│   │   └── analysisRoutes.js      # Report upload, analysis & history routes
 │   ├── services/
 │   │   ├── aiService.js           # Gemini API + multimodal analysis + validator
-│   │   └── extractionService.js   # OCR (Tesseract) + PDF text extraction
+│   │   ├── extractionService.js   # OCR (Tesseract) + PDF text extraction
+│   │   └── emailService.js        # Nodemailer SMTP logic
 │   ├── uploads/                   # Uploaded report files (gitignored)
 │   └── app.js                     # Express app entry point
 │
@@ -232,9 +244,12 @@ blood-report-analysis-system/
 │       │   └── UploadBox.jsx/.module.css
 │       ├── pages/
 │       │   ├── AnalysisResults.jsx/.module.css
+│       │   ├── ForgotPassword.jsx
+│       │   ├── History.jsx/.module.css
 │       │   ├── Home.jsx/.module.css
 │       │   ├── Login.jsx/.module.css
 │       │   ├── Register.jsx/.module.css
+│       │   ├── ResetPassword.jsx
 │       │   └── UploadReport.jsx/.module.css
 │       ├── App.jsx                 # Router configuration
 │       └── index.css               # Global CSS design tokens
