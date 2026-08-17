@@ -205,9 +205,9 @@ export default function Login() {
                 />
                 <span>Remember me</span>
               </label>
-              <a href="#forgot" className={styles.link} onClick={(e) => { e.preventDefault(); alert('Password reset link sent to console'); }}>
+              <Link to="/forgot-password" className={styles.link}>
                 Forgot password?
-              </a>
+              </Link>
             </div>
 
             <Button type="submit" variant="primary" fullWidth loading={loading}>

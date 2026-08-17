@@ -4,6 +4,8 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 const { OAuth2Client } = require("google-auth-library");
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+const crypto = require("crypto");
+const sendEmail = require("../services/emailService");
 
 
 // Helper to generate JWT
@@ -135,6 +137,85 @@ router.post("/google", async (req, res) => {
   } catch (error) {
     console.error("Google auth error:", error.message);
     return res.status(401).json({ message: "Google authentication failed" });
+  }
+});
+
+ 
+
+// @route   POST /api/auth/forgot-password
+// @desc    Forgot password (generates OTP)
+// @access  Public
+router.post("/forgot-password", async (req, res) => {
+  try {
+    const user = await User.findOne({ email: req.body.email });
+
+    if (!user) {
+      return res.status(404).json({ message: "There is no user with that email address." });
+    }
+
+    const otp = user.getResetPasswordOtp();
+    await user.save({ validateBeforeSave: false });
+
+    // Send actual email here if credentials exist, otherwise log to console for dev safety
+    try {
+      if ((process.env.SMTP_USER || process.env.SMTP_EMAIL) && (process.env.SMTP_PASS || process.env.SMTP_PASSWORD)) {
+        await sendEmail({
+          email: user.email,
+          subject: 'Password Reset OTP - VitalRead',
+          message: `Your password reset OTP is: ${otp}\n\nIt is valid for 10 minutes. If you did not request a password reset, please ignore this email.`,
+        });
+      } else {
+        console.warn(`[WARNING] No SMTP credentials configured in .env. Mock email sent to ${user.email} with OTP: ${otp}`);
+      }
+      
+      res.status(200).json({ success: true, message: "OTP sent to email" });
+    } catch (err) {
+      console.error("Email service error:", err);
+      // Clean up the OTP if the email failed
+      user.resetPasswordOtp = undefined;
+      user.resetPasswordExpire = undefined;
+      await user.save({ validateBeforeSave: false });
+      return res.status(500).json({ message: "Could not send the email." });
+    }
+  } catch (error) {
+    console.error("Forgot password error:", error);
+    res.status(500).json({ message: "Email test could not be sent" });
+  }
+});
+
+// @route   POST /api/auth/reset-password
+// @desc    Reset password
+// @access  Public
+router.post("/reset-password", async (req, res) => {
+  try {
+    const { email, otp, newPassword } = req.body;
+
+    if (!email || !otp || !newPassword) {
+      return res.status(400).json({ message: "Please provide email, OTP, and a new password" });
+    }
+
+    const resetPasswordOtp = crypto.createHash("sha256").update(otp).digest("hex");
+
+    const user = await User.findOne({
+      email,
+      resetPasswordOtp,
+      resetPasswordExpire: { $gt: Date.now() },
+    });
+
+    if (!user) {
+      return res.status(400).json({ message: "Invalid or expired OTP" });
+    }
+
+    user.password = newPassword;
+    user.resetPasswordOtp = undefined;
+    user.resetPasswordExpire = undefined;
+    
+    await user.save();
+
+    res.status(200).json({ success: true, message: "Password reset successfully! You can now log in." });
+  } catch (error) {
+    console.error("Reset password error:", error);
+    res.status(500).json({ message: "Server error" });
   }
 });
 
