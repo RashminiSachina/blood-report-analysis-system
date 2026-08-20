@@ -115,15 +115,22 @@ async function analyzeReport(req, res) {
     // Provide default disclaimer if not present
     const disclaimerObj = aiResult.disclaimer || 'This is an educational summary, not a medical diagnosis. Always discuss your results with a qualified healthcare professional.';
 
-    // Create Report in DB
-    const newReport = await Report.create({
-      user: req.user._id,
-      originalFileName: reportStore.has(id) ? reportStore.get(id).originalName : id,
-      systemFileName: id,
-      summary: aiResult.summary || 'Summary unavailable.',
-      parameters: aiResult.parameters || [],
-      disclaimer: disclaimerObj,
-    });
+    // Upsert Report in DB — prevents duplicates from concurrent requests
+    // (e.g. React Strict Mode fires effects twice in development)
+    const newReport = await Report.findOneAndUpdate(
+      { user: req.user._id, systemFileName: id },
+      {
+        $setOnInsert: {
+          user: req.user._id,
+          originalFileName: reportStore.has(id) ? reportStore.get(id).originalName : id,
+          systemFileName: id,
+          summary: aiResult.summary || 'Summary unavailable.',
+          parameters: aiResult.parameters || [],
+          disclaimer: disclaimerObj,
+        },
+      },
+      { upsert: true, new: true, setDefaultsOnInsert: true }
+    );
 
     // Step 3: Return structured analysis response
     return res.status(200).json({

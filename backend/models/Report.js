@@ -43,6 +43,9 @@ const reportSchema = new mongoose.Schema(
   }
 );
 
+// Unique compound index — prevents duplicate reports for the same file per user
+reportSchema.index({ user: 1, systemFileName: 1 }, { unique: true });
+
 const Report = mongoose.model('Report', reportSchema);
 
 module.exports = Report;
