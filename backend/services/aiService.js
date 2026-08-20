@@ -260,9 +260,9 @@ async function analyzeReportText(reportText, filePath = null, mimeType = null) {
   }
 
   const genAI = new GoogleGenerativeAI(apiKey);
-  // Using gemini-3.5-flash — supports multimodal input and generateContent
+  // Using gemini-1.5-flash — supports multimodal input and generateContent
   const model = genAI.getGenerativeModel({
-    model: "gemini-3.5-flash"
+    model: "gemini-1.5-flash"
   });
 
   const isImage = mimeType && (
